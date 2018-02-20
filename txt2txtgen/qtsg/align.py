@@ -463,7 +463,7 @@ def _top_vp_alignment(src, tgt, explains):
         if not (src_node_OK and tgt_node_OK):
             explains[i,j]=False
             if PRINT_DEBUG_ALIGNMENTS:
-                print "Removing lower VP link (%d,%d) \t%s -- %s" % (i, j, QGCore.nodeText(st),QGCore.nodeText(tt))
+                print "Removing lower VP link (%d,%d) \t%s -- %s" % (i, j, QGCore.nodeText(st), QGCore.nodeText(tt))
 
 
 

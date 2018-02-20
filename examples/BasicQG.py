@@ -5,7 +5,8 @@ Created on 22 Jan 2015
 '''
 
 import parse.StanfordCoreNLP
-import qtsg.align, qtsg.info, qtsg.SyncTreeGrammar, qtsg.statements
+import txt2txtgen.qtsg.align, txt2txtgen.qtsg.info, txt2txtgen.qtsg.statements
+from txt2txtgen import qtsg
 from summarize.Choosers import ChoiceTree, SingleShotChoiceTree
 
 
@@ -383,39 +384,39 @@ src_sentence = doc.sentence(0)
 tgt_sentence = headline_doc.sentence(0)
 
 # this matches words (leaf nodes), then nodes higher in the two trees
-matchList = qtsg.align.align_nodes(src_sentence, tgt_sentence)
+matchList = txt2txtgen.qtsg.align.align_nodes(src_sentence, tgt_sentence)
 
 # print out the token and node alignments we have
-qtsg.info.printAllMatchListInfo(matchList)
+txt2txtgen.qtsg.info.printAllMatchListInfo(matchList)
 
 
 # create a grammar, by linking matched trees
-qg_tree_pairs = qtsg.SyncTreeGrammar.extract_grammar( matchList )
-qg_rules = [qtsg.SyncTreeGrammar.SyncGrammarRule(s,t) for (s,t) in qg_tree_pairs]
+qg_tree_pairs = txt2txtgen.qtsg.SyncTreeGrammar.extract_grammar(matchList)
+qg_rules = [txt2txtgen.qtsg.SyncTreeGrammar.SyncGrammarRule(s, t) for (s, t) in qg_tree_pairs]
 qg_rules = [r for r in qg_rules if not r.isIdentical()]
-qg_rules = qtsg.SyncTreeGrammar.combine_duplicate_rules(qg_rules)
+qg_rules = txt2txtgen.qtsg.SyncTreeGrammar.combine_duplicate_rules(qg_rules)
 
 # print out what the grammar looks like so far
 for r in qg_rules:
     print r
-qtsg.info.printRuleSetInfo(qg_rules)
+txt2txtgen.qtsg.info.printRuleSetInfo(qg_rules)
 
 # split the grammar into two types: ones that create new sentences, and ones that modify the sentence
-st_grammar, normal_grammar = qtsg.statements.split_grammar_ST(qg_rules)
+st_grammar, normal_grammar = txt2txtgen.qtsg.statements.split_grammar_ST(qg_rules)
 
 # apply the grammar to a sentence, to create some possible paraphrases
 src_tree = src_sentence.parseTree()
-st_paraphrases, _st_rulelist = qtsg.statements.split_sentence(src_tree, st_grammar, normal_grammar)
+st_paraphrases, _st_rulelist = txt2txtgen.qtsg.statements.split_sentence(src_tree, st_grammar, normal_grammar)
 
 print
 print "Possible root paraphrase sentences:"
 for i, st in enumerate(st_paraphrases):
-    print i, "\t", qtsg.QGCore.nodeText(st)
+    print i, "\t", txt2txtgen.qtsg.QGCore.nodeText(st)
 
 
 # these choice_trees capture all the information about possible rewrites
 # this would be the input to the ILP
-choice_trees = [ qtsg.statements.create_ST_paraphrase_tree(st, normal_grammar) for st in st_paraphrases]
+choice_trees = [txt2txtgen.qtsg.statements.create_ST_paraphrase_tree(st, normal_grammar) for st in st_paraphrases]
 
 
 # everything below is just to print out what the grammar has produced
@@ -435,7 +436,7 @@ for i, tree in enumerate(choice_trees):
         while True:
             current_choices = [subct.current for subct in ct.flatten()]
             ct.set_choices()
-            result_list.append(qtsg.QGCore.nodeText(tree))
+            result_list.append(txt2txtgen.qtsg.QGCore.nodeText(tree))
             ct.next_choice()
     except StopIteration:
         pass

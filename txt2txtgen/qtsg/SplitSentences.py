@@ -211,7 +211,7 @@ def _sentenceSplitParaphrase(ph, splitRuleset, singleSTRuleset, singleLexQGRules
                 
                     print "applying to s2:",r._sent2Rule
                 # TODO: LIMIT_RULE_DEPTH-1
-                para2 = QGParaphrase.createParaphraseTree(ph, r._sent2Rule, singleSTRuleset, QGParaphrase.LIMIT_RULE_DEPTH-2)
+                para2 = QGParaphrase.createParaphraseTree(ph, r._sent2Rule, singleSTRuleset, QGParaphrase.LIMIT_RULE_DEPTH - 2)
                 para2copy = [ (i,ch) for (i,ch) in enumerate(para2) if not ch.isLeaf()]
                 para2SentenceSplitInfo = None
                 for (i,ch) in para2copy:
@@ -237,7 +237,7 @@ def _sentenceSplitParaphrase(ph, splitRuleset, singleSTRuleset, singleLexQGRules
                 # TODO: need to generate paraphrase with as few changes as possible
                 # use depth LIMIT_RULE_DEPTH, but then if a change of constituent is needed, LIMIT_RULE_DEPTH-2
                 para1SentenceSplitInfo = []
-                para1 = QGParaphrase.createParaphraseTree(ph, r._sent1Rule, singleSTRuleset, QGParaphrase.LIMIT_RULE_DEPTH-2)
+                para1 = QGParaphrase.createParaphraseTree(ph, r._sent1Rule, singleSTRuleset, QGParaphrase.LIMIT_RULE_DEPTH - 2)
                 para1copy = [ (i,ch) for (i,ch) in enumerate(para1) if not ch.isLeaf()]
                 for (i,ch) in para1copy:
                     # print "para1copy:",i, ch.tag()
@@ -275,7 +275,7 @@ def _sentenceSplitParaphrase(ph, splitRuleset, singleSTRuleset, singleLexQGRules
         assert len(choiceList)>0,"Not enough choices"
         sentenceSplitList.extend(choiceList)
         choices = [ (ch.main(),ch.count(),False) for ch in choiceList ]
-        choices.append((QGParaphrase.createParaphraseTree( ph, dupRule, singleSTRuleset, 0),dupRule.count(), True))
+        choices.append((QGParaphrase.createParaphraseTree(ph, dupRule, singleSTRuleset, 0), dupRule.count(), True))
         if DEBUG_SENTENCE_SPLIT: 
             for (p1,count,_identical) in choices: print p1.tag(), p1.parent(), nodeText(p1)
         newPh = PhraseTreeChoice.create(choices)                
@@ -1010,7 +1010,7 @@ def saveQSGRules( rules, task, filename=QSGSplitRulesPickleFile ):
     SyncTreeGrammar.saveQSGRules(rules, task, filename=filename)
     
 def loadQSGRules(task, filename=QSGSplitRulesPickleFile):
-    return SyncTreeGrammar.loadQSGRules(task,filename=filename)
+    return SyncTreeGrammar.loadQSGRules(task, filename=filename)
 
 
 def printRuleSet( resultsList, minCount=2, sort=True ):
